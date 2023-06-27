@@ -7,6 +7,7 @@ interface CursoProps {
 export default function CursoPage({ params }: CursoProps) {
     return (
         <div>
+            <h1>Estudiantes</h1>
             <ListOfStudents params={params} />
         </div>
     )
