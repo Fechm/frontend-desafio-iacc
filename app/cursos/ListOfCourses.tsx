@@ -53,18 +53,20 @@ const columns: ColumnsType<Course> = [
 ]
 
 const fetchCourses = async () => {
-    return fetch('http://localhost:3000/cursos', { cache: 'no-cache' })
-        .then(res => res.json())
+    //Obtiene los Cursos
+    //Se setea cache: 'no-cache' para el SSR
+    const res = await fetch('http://localhost:3000/cursos', { cache: 'no-cache' });
+    if (!res.ok) throw new Error('Cursos no encontrados...');
+    return res.json();
 }
 
 export async function ListOfCourses() {
-    const courses = await fetchCourses();
-    const hasError = courses.some((course: any) => course.hasOwnProperty('statusCode'));
-    if (!hasError) {
+    try {
+        const courses = await fetchCourses();
         return (
             <Table<Course> columns={columns} dataSource={courses} />
         );
-    } else {
-        return (courses.message);
+    } catch (error: any) {
+        return (<div>{error.message}</div>);
     }
 }
